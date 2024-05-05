@@ -1,0 +1,44 @@
+services:
+  textmagic_task_php:
+    build:
+      context: docker/php-fpm
+      args:
+        USER_ID: 1000
+    volumes:
+      - .:/var/www/app:rw
+    hostname: php
+    networks:
+      - tm-network
+  textmagic_task_nginx:
+    build:
+      context: docker/nginx
+    ports:
+      - "8080:80"
+    networks:
+      - tm-network
+  textmagic_task_db:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: textmagic_password
+      POSTGRES_USER: textmagic_user
+      POSTGRES_DB: textmagic
+    ports:
+      - "5432:5432"
+    hostname: postgres
+    networks:
+      - tm-network
+  textmagic_task_redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    hostname: redis
+    networks:
+      - tm-network
+
+volumes:
+  db_data: ~
+
+networks:
+  tm-network: ~

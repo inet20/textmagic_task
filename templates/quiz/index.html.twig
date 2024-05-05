@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container" style="display: flex; align-items: center; justify-content: center; margin-top: 20px">
+        <div class="mx-0 mx-sm-auto">
+            {{ form_start(form) }}
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <i class="far fa-file-alt fa-4x mb-3 text-primary"></i>
+                        <p>
+                            <strong>Вопрос {{ step }}/{{ length }}</strong>
+                        </p>
+                        <p style="text-align: left">
+                            {{ question.text }}
+                        </p>
+                    </div>
+
+                    <hr />
+                    {% if not form.vars.valid %}
+                        <div class="alert alert-danger">
+                            {{ form_errors(form.choices) }}
+                        </div>
+                    {% endif %}
+
+                    {% for choice in form.choices %}
+                        <div class="form-check mb-2">
+                            {{ form_widget(choice, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(choice, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    {% if (step > 1) %}
+                        {{ form_widget(form.prev, {'attr': {'class': 'btn btn-primary'}, 'label': 'Назад'}) }}
+                    {% endif %}
+                    {% set nextLabel = (step == length) ? 'Завершить' : 'Вперед' %}
+                    {{ form_widget(form.next, {'attr': {'class': 'btn btn-primary btn-right'}, 'label': nextLabel}) }}
+                </div>
+            </div>
+            {{ form_widget(form._token) }}
+            {{ form_end(form, {render_rest: false}) }}
+        </div>
+    </div>
+
+{% endblock %}

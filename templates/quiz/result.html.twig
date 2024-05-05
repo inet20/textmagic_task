@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container" style="display: flex; align-items: center; justify-content: center; margin-top: 20px">
+        <div class="mx-0 mx-sm-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <i class="far fa-file-alt fa-4x mb-3 text-primary"></i>
+                        <p>
+                            <strong>Результаты тестирования</strong>
+                        </p>
+                    </div>
+
+                    <div class="card-footer another-test">
+                        <a class="btn btn-primary" href="{{ path('app_quiz_reset') }}" role="button">Пройти еще раз</a>
+                    </div>
+
+                </div>
+            </div>
+            {% for questionId, question in result.quiz.questions %}
+                {% set counter = ( counter | default(0) ) + 1 %}
+
+                {% set questionRating = rating.questions[questionId] %}
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <i class="far fa-file-alt fa-4x mb-3 text-primary"></i>
+                            <p class="{{ questionRating.rating ? 'result-correct' : 'result-invalid' }}">
+                                {% if questionRating.rating %}
+                                    <i class="bi bi-check-square-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-x-square-fill"></i>
+                                {% endif %}
+                                <strong>Вопрос {{ counter }}/{{ length }}</strong>
+                            </p>
+                            <p style="text-align: left">
+                                {{ question.text }}
+                            </p>
+                        </div>
+
+                        <hr/>
+                        {% for choiceId in question.choiceOrder %}
+                            {% if questionRating.choiceRatings[choiceId] is null %}
+                                {% set classname = '' %}
+                                {% set icon = 'app' %}
+                            {% elseif questionRating.choiceRatings[choiceId] %}
+                                {% set classname = 'result-correct' %}
+                                {% set icon = 'check-square-fill' %}
+                            {% else %}
+                                {% set classname = 'result-invalid' %}
+                                {% set icon = 'x-square-fill' %}
+                            {% endif %}
+
+                            <div class="form-check form-check-result mb-2 {{ classname }}">
+                                <i class="bi bi-{{ icon }}"></i>
+                                {{ question.choices[choiceId].text }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

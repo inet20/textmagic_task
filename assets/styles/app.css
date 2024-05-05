@@ -1,0 +1,31 @@
+body {
+    background-color: #e5edf6;
+}
+
+.card-body {
+    width: 300px;
+}
+
+.btn-right {
+    float: right;;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.form-check-result {
+    padding-left: 0;
+}
+
+.result-correct {
+    color: #3f9a2c;
+}
+
+.result-invalid {
+    color: #c31c1c;
+}
+
+.another-test {
+    text-align: center;
+}
